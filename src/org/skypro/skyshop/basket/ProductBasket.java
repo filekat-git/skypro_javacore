@@ -6,17 +6,17 @@ import java.util.Arrays;
 
 public class ProductBasket {
 
-    private final Product[] BASKET;
+    private final Product[] basket;
 
     public ProductBasket(int capacity) {
-        this.BASKET = new Product[capacity];
+        this.basket = new Product[capacity];
     }
 
     public void addProduct(Product product) {
         boolean productAdded = false;
-        for (int i = 0; i < BASKET.length; i++) {
-            if (BASKET[i] == null) {
-                BASKET[i] = product;
+        for (int i = 0; i < basket.length; i++) {
+            if (basket[i] == null) {
+                basket[i] = product;
                 productAdded = true;
                 return;
             }
@@ -28,7 +28,7 @@ public class ProductBasket {
 
     public int totalPrice() {
         int total = 0;
-        for (Product product : BASKET) {
+        for (Product product : basket) {
             if (product != null) {
                 total += product.getPrice();
             }
@@ -39,7 +39,7 @@ public class ProductBasket {
     public void printBasket() {
         boolean basketIsEmpty = true;
         int total = 0;
-        for (Product product : BASKET) {
+        for (Product product : basket) {
             if (product != null) {
                 basketIsEmpty = false;
                 total += product.getPrice();
@@ -54,7 +54,7 @@ public class ProductBasket {
     }
 
     public boolean isProductInBasket(String name) {
-        for (Product product : BASKET) {
+        for (Product product : basket) {
             if (product != null && product.getName().equals(name)) {
                 return true;
             }
@@ -63,6 +63,6 @@ public class ProductBasket {
     }
 
     public void clearBasket() {
-        Arrays.fill(BASKET, null);
+        Arrays.fill(basket, null);
     }
 }
