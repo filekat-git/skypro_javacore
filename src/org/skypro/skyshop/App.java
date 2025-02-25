@@ -1,7 +1,7 @@
 package org.skypro.skyshop;
 
 import org.skypro.skyshop.basket.ProductBasket;
-import org.skypro.skyshop.product.Product;
+import org.skypro.skyshop.product.SimpleProduct;
 
 public class App {
 
@@ -9,13 +9,13 @@ public class App {
 
         ProductBasket basket = new ProductBasket(5);
 
-        basket.addProduct(new Product("tomato", 500));
-        basket.addProduct(new Product("cucumber", 400));
-        basket.addProduct(new Product("pepper", 350));
-        basket.addProduct(new Product("olive_oil", 1500));
-        basket.addProduct(new Product("brine_cheese", 250));
+        basket.addProduct(new SimpleProduct("tomato", 500));
+        basket.addProduct(new SimpleProduct("cucumber", 400));
+        basket.addProduct(new SimpleProduct("pepper", 350));
+        basket.addProduct(new SimpleProduct("olive_oil", 1500));
+        basket.addProduct(new SimpleProduct("brine_cheese", 250));
 
-        basket.addProduct(new Product("olives", 400));
+        basket.addProduct(new SimpleProduct("olives", 400));
 
         System.out.println();
         basket.printBasket();

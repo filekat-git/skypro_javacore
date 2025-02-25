@@ -43,7 +43,8 @@ public class ProductBasket {
             if (product != null) {
                 basketIsEmpty = false;
                 total += product.getPrice();
-                System.out.println(product.toString(true));
+//                System.out.println(product.toString(true));
+                System.out.println(product);
             }
         }
         if (basketIsEmpty) {
