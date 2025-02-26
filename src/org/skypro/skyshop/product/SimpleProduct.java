@@ -4,7 +4,7 @@ public class SimpleProduct extends Product {
 
     private int price;
 
-    public SimpleProduct(String name, int price){
+    public SimpleProduct(String name, int price) {
         super(name);
         this.price = price;
     }
@@ -12,5 +12,15 @@ public class SimpleProduct extends Product {
     @Override
     public int getPrice() {
         return price;
+    }
+
+    @Override
+    public boolean isSpecial() {
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Продукт: " + getName() + ", стоимость: " + getPrice();
     }
 }
