@@ -61,7 +61,7 @@ public class App {
         System.out.println("searchTerm = " + searchTerm);
         for (Searchable foundElement : foundElements) {
             if (foundElement != null) {
-                System.out.println("ContentType = " + foundElement.getContentType());
+                System.out.println("ContentType = \"" + foundElement.getContentType() + "\"");
                 System.out.println("StringRepresentation = " + foundElement.getStringRepresentation());
             }
         }
