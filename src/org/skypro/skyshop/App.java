@@ -1,6 +1,7 @@
 package org.skypro.skyshop;
 
 import org.skypro.skyshop.article.Article;
+import org.skypro.skyshop.exceptions.BestResultNotFound;
 import org.skypro.skyshop.product.DiscountedProduct;
 import org.skypro.skyshop.product.FixPriceProduct;
 import org.skypro.skyshop.product.SimpleProduct;
@@ -13,15 +14,57 @@ public class App {
     public static void main(String[] args) {
 
         Searchable[] foundElements;
-        String searchTerm;
+        Searchable foundElement;
         SearchEngine searchableElements = new SearchEngine(10);
-        searchableElements.add(new SimpleProduct("Мяч футзальный", 500));
-        searchableElements.add(new SimpleProduct("Мяч баскетбольный", 500));
-        searchableElements.add(new DiscountedProduct("Набор мячей для тенниса", 400, 20));
-        searchableElements.add(new DiscountedProduct("Мяч волейбольный", 350, 25));
-        searchableElements.add(new SimpleProduct("Лента силовая", 200));
-        searchableElements.add(new FixPriceProduct("Очки для плавания"));
-        searchableElements.add(new SimpleProduct("Коврик для йоги", 1400));
+
+        try {
+            searchableElements.add(new SimpleProduct("Мяч футзальный (Мяч для футбола в зале)", 500));
+        } catch (IllegalArgumentException e) {
+            System.out.println("IllegalArgumentException: " + e.getMessage());
+        }
+
+        try {
+            searchableElements.add(new SimpleProduct("Мяч баскетбольный", 0));
+        } catch (IllegalArgumentException e) {
+            System.out.println("IllegalArgumentException: " + e.getMessage());
+        }
+
+        try {
+            searchableElements.add(new DiscountedProduct("Набор мячей для тенниса", 200, 101));
+        } catch (IllegalArgumentException e) {
+            System.out.println("IllegalArgumentException: " + e.getMessage());
+        }
+
+        try {
+            searchableElements.add(new DiscountedProduct("Мяч волейбольный", 0, 25));
+        } catch (IllegalArgumentException e) {
+            System.out.println("IllegalArgumentException: " + e.getMessage());
+        }
+
+        try {
+            searchableElements.add(new SimpleProduct("", 200));
+        } catch (IllegalArgumentException e) {
+            System.out.println("IllegalArgumentException: " + e.getMessage());
+        }
+
+        try {
+            searchableElements.add(new FixPriceProduct("Очки для плавания"));
+        } catch (IllegalArgumentException e) {
+            System.out.println("IllegalArgumentException: " + e.getMessage());
+        }
+
+        try {
+            searchableElements.add(new SimpleProduct("Коврик для йоги", 1400));
+        } catch (IllegalArgumentException e) {
+            System.out.println("IllegalArgumentException: " + e.getMessage());
+        }
+
+        try {
+            searchableElements.add(new SimpleProduct("Сушилка для обуви", 400));
+        } catch (IllegalArgumentException e) {
+            System.out.println("IllegalArgumentException: " + e.getMessage());
+        }
+
         searchableElements.add(new Article("Выбираем обувь для футбола",
                 "Играть в бутсах однозначно комфортнее, чем в кроссовках. " +
                         "Форма обуви важна, чтобы чувствовать мяч " +
@@ -44,25 +87,32 @@ public class App {
                         "Одежда для тенниса;\n" +
                         "Сумка для теннисного снаряжения."));
 
-        searchTerm = "мяч";
-        foundElements = searchableElements.search(searchTerm);
-        System.out.println("searchTerm = " + searchTerm);
-        for (Searchable foundElement : foundElements) {
-            if (foundElement != null) {
-                System.out.println("ContentType = " + foundElement.getContentType());
-                System.out.println("StringRepresentation = " + foundElement.getStringRepresentation());
-            }
-        }
-
         System.out.println();
+        System.out.println("searchableElements.actualSize() = " + searchableElements.actualSize());
 
-        searchTerm = "обувь";
-        foundElements = searchableElements.search(searchTerm);
-        System.out.println("searchTerm = " + searchTerm);
-        for (Searchable foundElement : foundElements) {
-            if (foundElement != null) {
-                System.out.println("ContentType = \"" + foundElement.getContentType() + "\"");
-                System.out.println("StringRepresentation = " + foundElement.getStringRepresentation());
+        String[] searchTerms = {"мяч", "обувь", "hello"};
+        for (String searchTerm : searchTerms) {
+            System.out.println();
+            System.out.println("searchTerm = " + searchTerm);
+            foundElements = searchableElements.search(searchTerm);
+            System.out.println();
+            System.out.println("searchableElements.search(searchTerm) method");
+            for (Searchable s : foundElements) {
+                if (s != null) {
+                    System.out.println();
+                    System.out.println("ContentType = " + s.getContentType());
+                    System.out.println("StringRepresentation = " + s.getStringRepresentation());
+                }
+            }
+
+            try {
+                System.out.println();
+                System.out.println("searchableElements.searchBestResult(searchTerm) method");
+                foundElement = searchableElements.searchBestResult(searchTerm);
+                System.out.println();
+                System.out.println("foundElement = " + foundElement);
+            } catch (BestResultNotFound e) {
+                System.out.println(e.getMessage());
             }
         }
     }
