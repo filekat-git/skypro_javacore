@@ -2,32 +2,26 @@ package org.skypro.skyshop.services;
 
 import org.skypro.skyshop.exceptions.BestResultNotFound;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SearchEngine {
 
-    private Searchable[] searchableElements;
+    private List<Searchable> searchableElements;
 
-    public SearchEngine(int size) {
-        searchableElements = new Searchable[size];
+    public SearchEngine() {
+        searchableElements = new ArrayList<>();
     }
 
     public void add(Searchable searchableElement) {
-        for (int i = 0; i < searchableElements.length; i++) {
-            if (searchableElements[i] == null) {
-                searchableElements[i] = searchableElement;
-                break;
-            }
-        }
+        searchableElements.add(searchableElement);
     }
 
-    public Searchable[] search(String searchTerm) {
-        Searchable[] foundElements = new Searchable[5];
-        int i = 0;
+    public List<Searchable> search(String searchTerm) {
+        List<Searchable> foundElements = new ArrayList<>();
         for (Searchable searchableElement : searchableElements) {
-            if (searchableElement != null && searchableElement.getSearchTerm().toLowerCase().contains(searchTerm.toLowerCase()) && i < 5) {
-                foundElements[i++] = searchableElement;
-            }
-            if (i == 5) {
-                break;
+            if (searchableElement != null && searchableElement.getSearchTerm().toLowerCase().contains(searchTerm.toLowerCase())) {
+                foundElements.add(searchableElement);
             }
         }
         return foundElements;
@@ -66,13 +60,10 @@ public class SearchEngine {
 
     }
 
-    public int actualSize() {
-        int i = 0;
-        for (Searchable searchableElement : searchableElements) {
-            if (searchableElement != null) {
-                i++;
-            }
-        }
-        return i;
+    @Override
+    public String toString() {
+        return "SearchEngine{" +
+                "searchableElements=" + searchableElements +
+                '}';
     }
 }
