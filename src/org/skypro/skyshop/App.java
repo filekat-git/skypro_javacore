@@ -12,7 +12,7 @@ import org.skypro.skyshop.services.Searchable;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 
 public class App {
@@ -32,18 +32,21 @@ public class App {
         System.out.println("Демонстрация поиска");
         System.out.println("searchableElements = " + searchableElements);
 
-        Map<String, Searchable> foundElements;
+        Set<Searchable> foundElements;
         Searchable foundElement;
 
         String[] searchTerms = {"мяч", "обувь", "hello"};
-        foundElements = searchableElements.search(searchTerms);
-        System.out.println();
-        System.out.println("searchableElements.search(searchTerm) method");
         System.out.println("searchTerms = " + Arrays.toString(searchTerms));
-        for (Map.Entry<String, Searchable> entry : foundElements.entrySet()) {
+
+        for (String searchTerm : searchTerms) {
+            foundElements = searchableElements.search(searchTerm);
             System.out.println();
-            System.out.println("SearchTerm (имя Searchable-объекта) = " + entry.getKey());
-            System.out.println("StringRepresentation (строковое представление Searchable-объекта) = " + entry.getValue().getStringRepresentation());
+            System.out.println("searchableElements.search(searchTerm) method");
+            System.out.println("searchTerm = " + searchTerm);
+            for (Searchable entry : foundElements) {
+                System.out.println();
+                System.out.println("StringRepresentation Searchable-объекта = " + entry.getStringRepresentation());
+            }
         }
 
         for (String searchTerm : searchTerms) {
@@ -111,6 +114,30 @@ public class App {
             Product p2 = new SimpleProduct("Мяч баскетбольный", 0);
             basket.add(p2);
             searchableElements.add(p2);
+        } catch (IllegalArgumentException e) {
+            System.out.println("IllegalArgumentException: " + e.getMessage());
+        }
+
+        try {
+            Product p22 = new SimpleProduct("Мяч баскетбольный (размер 5)", 350);
+            basket.add(p22);
+            searchableElements.add(p22);
+        } catch (IllegalArgumentException e) {
+            System.out.println("IllegalArgumentException: " + e.getMessage());
+        }
+
+        try {
+            Product p23 = new SimpleProduct("Мяч баскетбольный (размер 3)", 250);
+            basket.add(p23);
+            searchableElements.add(p23);
+        } catch (IllegalArgumentException e) {
+            System.out.println("IllegalArgumentException: " + e.getMessage());
+        }
+
+        try {
+            Product p24 = new SimpleProduct("Мяч баскетбольный (размер 4)", 300);
+            basket.add(p24);
+            searchableElements.add(p24);
         } catch (IllegalArgumentException e) {
             System.out.println("IllegalArgumentException: " + e.getMessage());
         }
@@ -222,6 +249,18 @@ public class App {
                             "Одежда для тенниса;\n" +
                             "Сумка для теннисного снаряжения.");
             searchableElements.add(a3);
+        } catch (IllegalArgumentException e) {
+            System.out.println("IllegalArgumentException: " + e.getMessage());
+        }
+
+        try {
+            Article a31 = new Article("Что нужно купить, чтобы начать играть в большой теннис?",
+                    "Ракетка для тенниса;\n" +
+                            "Теннисные мячи;\n" +
+                            "Обувь для тенниса;\n" +
+                            "Одежда для тенниса;\n" +
+                            "Сумка для теннисного снаряжения.");
+            searchableElements.add(a31);
         } catch (IllegalArgumentException e) {
             System.out.println("IllegalArgumentException: " + e.getMessage());
         }
