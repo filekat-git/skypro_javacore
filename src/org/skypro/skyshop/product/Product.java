@@ -4,7 +4,7 @@ import org.skypro.skyshop.services.Searchable;
 
 public abstract class Product implements Searchable {
 
-    private String name;
+    protected final String name;
 
     public Product(String name) throws IllegalArgumentException {
         if (name == null || name.isBlank()) {

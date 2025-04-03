@@ -9,7 +9,10 @@ import org.skypro.skyshop.product.Product;
 import org.skypro.skyshop.product.SimpleProduct;
 import org.skypro.skyshop.services.SearchEngine;
 import org.skypro.skyshop.services.Searchable;
+
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 
 public class App {
@@ -19,14 +22,54 @@ public class App {
     public static List<Product> removedProducts;
 
     public static void main(String[] args) {
-
         createElementsAndFillCollections();
+        basketDemo();
+        searchDemo();
+    }
 
+    private static void searchDemo() {
+        System.out.println();
+        System.out.println("Демонстрация поиска");
+        System.out.println("searchableElements = " + searchableElements);
+
+        Map<String, Searchable> foundElements;
+        Searchable foundElement;
+
+        String[] searchTerms = {"мяч", "обувь", "hello"};
+        foundElements = searchableElements.search(searchTerms);
+        System.out.println();
+        System.out.println("searchableElements.search(searchTerm) method");
+        System.out.println("searchTerms = " + Arrays.toString(searchTerms));
+        for (Map.Entry<String, Searchable> entry : foundElements.entrySet()) {
+            System.out.println();
+            System.out.println("SearchTerm (имя Searchable-объекта) = " + entry.getKey());
+            System.out.println("StringRepresentation (строковое представление Searchable-объекта) = " + entry.getValue().getStringRepresentation());
+        }
+
+        for (String searchTerm : searchTerms) {
+            try {
+                System.out.println();
+                System.out.println("searchableElements.searchBestResult(searchTerm) method");
+                System.out.println("searchTerm = " + searchTerm);
+                foundElement = searchableElements.searchBestResult(searchTerm);
+                System.out.println("foundElement = " + foundElement);
+            } catch (BestResultNotFound e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    public static void basketDemo() {
+        System.out.println();
         System.out.println("Демонстрация корзины");
+        System.out.println();
         basket.printBasket();
+        System.out.println();
         System.out.println("basket.totalPrice() = " + basket.totalPrice());
+        System.out.println();
         System.out.println("basket.isProductInBasket(\"Коврик для йоги\") = " + basket.isProductInBasket("Коврик для йоги"));
         System.out.println("basket.isProductInBasket(\"Томат\") = " + basket.isProductInBasket("Томат"));
+        System.out.println();
         removedProducts = basket.remove("мяч");
         if (removedProducts.isEmpty()) {
             System.out.println("Список удаленных продуктов пуст");
@@ -39,39 +82,8 @@ public class App {
         } else {
             System.out.println(removedProducts);
         }
+        System.out.println();
         basket.printBasket();
-
-        System.out.println("Демонстрация поиска");
-        System.out.println("searchableElements = " + searchableElements);
-
-        List<Searchable> foundElements;
-        Searchable foundElement;
-
-        String[] searchTerms = {"мяч", "обувь", "hello"};
-        for (String searchTerm : searchTerms) {
-            System.out.println();
-            System.out.println("searchTerm = " + searchTerm);
-            foundElements = searchableElements.search(searchTerm);
-            System.out.println();
-            System.out.println("searchableElements.search(searchTerm) method");
-            for (Searchable s : foundElements) {
-                if (s != null) {
-                    System.out.println();
-                    System.out.println("ContentType = " + s.getContentType());
-                    System.out.println("StringRepresentation = " + s.getStringRepresentation());
-                }
-            }
-
-            try {
-                System.out.println();
-                System.out.println("searchableElements.searchBestResult(searchTerm) method");
-                foundElement = searchableElements.searchBestResult(searchTerm);
-                System.out.println();
-                System.out.println("foundElement = " + foundElement);
-            } catch (BestResultNotFound e) {
-                System.out.println(e.getMessage());
-            }
-        }
     }
 
     public static void createElementsAndFillCollections() {
@@ -88,6 +100,14 @@ public class App {
         }
 
         try {
+            Product p11 = new SimpleProduct("Мяч футзальный (Мяч для футбола в зале)", 500);
+            basket.add(p11);
+            searchableElements.add(p11);
+        } catch (IllegalArgumentException e) {
+            System.out.println("IllegalArgumentException: " + e.getMessage());
+        }
+
+        try {
             Product p2 = new SimpleProduct("Мяч баскетбольный", 0);
             basket.add(p2);
             searchableElements.add(p2);
@@ -99,6 +119,30 @@ public class App {
             Product p3 = new DiscountedProduct("Набор мячей для тенниса", 200, 101);
             basket.add(p3);
             searchableElements.add(p3);
+        } catch (IllegalArgumentException e) {
+            System.out.println("IllegalArgumentException: " + e.getMessage());
+        }
+
+        try {
+            Product p31 = new DiscountedProduct("Набор мячей для тенниса", 200, 10);
+            basket.add(p31);
+            searchableElements.add(p31);
+        } catch (IllegalArgumentException e) {
+            System.out.println("IllegalArgumentException: " + e.getMessage());
+        }
+
+        try {
+            Product p32 = new DiscountedProduct("Набор мячей для тенниса", 200, 20);
+            basket.add(p32);
+            searchableElements.add(p32);
+        } catch (IllegalArgumentException e) {
+            System.out.println("IllegalArgumentException: " + e.getMessage());
+        }
+
+        try {
+            Product p33 = new DiscountedProduct("Набор мячей для тенниса", 200, 20);
+            basket.add(p33);
+            searchableElements.add(p33);
         } catch (IllegalArgumentException e) {
             System.out.println("IllegalArgumentException: " + e.getMessage());
         }
@@ -183,6 +227,5 @@ public class App {
         }
 
     }
-
 
 }
