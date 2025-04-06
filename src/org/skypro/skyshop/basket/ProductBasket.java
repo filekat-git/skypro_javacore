@@ -21,47 +21,35 @@ public class ProductBasket {
     }
 
     public int totalPrice() {
-        int total = 0;
-        for (Map.Entry<Product, List<Product>> entry: basket.entrySet()) {
-            Product key = entry.getKey();
-            if (key != null) {
-                int quantity = entry.getValue() == null ? 0: entry.getValue().size();
-                total += key.getPrice() * quantity;
-            }
-        }
-        return total;
+        return basket.values().stream()
+                .flatMap(product -> product.stream())
+                .mapToInt(product -> product.getPrice())
+                .sum();
+    }
+
+    private long getSpecialCount() {
+        return basket.values().stream()
+                .flatMap(product -> product.stream())
+                .filter(product -> product.isSpecial())
+                .count();
     }
 
     public void printBasket() {
         if (basket.isEmpty()) {
             System.out.println("Корзина пуста.");
         } else {
-            int total = 0;
-            int specialPositions = 0;
-            for (Map.Entry<Product, List<Product>> entry : basket.entrySet()) {
-                Product key = entry.getKey();
-                if (key!=null) {
-                    int quantity = entry.getValue() == null ? 0: entry.getValue().size();
-                    total += key.getPrice() * quantity;
-                    if (key.isSpecial()) {
-                        specialPositions++;
-                    }
-                    System.out.println(key + ", шт: " + quantity);
-                }
-            }
-            System.out.println("Итого: " + total);
-            System.out.println("Специальных товаров: " + specialPositions);
+            basket.values().stream()
+                    .flatMap(product -> product.stream())
+                    .forEach(System.out::println);
+            System.out.println("Итого: " + totalPrice());
+            System.out.println("Специальных товаров: " + getSpecialCount());
         }
     }
 
     public boolean isProductInBasket(String name) {
-        for (Map.Entry<Product, List<Product>> entry: basket.entrySet()) {
-            Product key = entry.getKey();
-            if (key != null && key.getName().equals(name)) {
-                return true;
-            }
-        }
-        return false;
+        return basket.values().stream()
+                .flatMap(products -> products.stream())
+                .anyMatch(product -> product.getName().equals(name));
     }
 
     public List<Product> remove(String name) {
